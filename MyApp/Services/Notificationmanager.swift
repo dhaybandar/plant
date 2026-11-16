@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import UserNotifications
 
 struct InAppBanner: Identifiable, Equatable {
@@ -81,20 +82,8 @@ final class NotificationManager: NSObject, ObservableObject, UNUserNotificationC
             )
             self.center.add(periodicRequest)
 
-            // 4) بانر تفاعلي داخل التطبيق يظهر بعد 3 ثواني مباشرة (ليظهر في المعاينة والمحاكي)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) {
-                    self.activeBanner = InAppBanner(title: title, body: body)
-                }
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4.5) {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        if self.activeBanner?.id == self.activeBanner?.id {
-                            self.activeBanner = nil
-                        }
-                    }
-                }
-            }
+            // يعرض النظام إشعارًا واحدًا فقط. لا ننشئ بانرًا داخل التطبيق
+            // لتفادي تكرار نفس التذكير عندما يكون التطبيق مفتوحًا.
         }
     }
 

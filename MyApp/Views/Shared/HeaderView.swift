@@ -4,7 +4,7 @@ struct Header: View {
     var body: some View {
         VStack(spacing: 12) {
             HStack {
-                Text("My Plants \(Image(systemName: "leaf.fill"))")
+                Text("My Plants 🌱")
                     .font(.title2.bold())
                     .foregroundStyle(Theme.primaryText)
                 Spacer()

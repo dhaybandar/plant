@@ -21,8 +21,16 @@ struct PlantRow: View {
                     .font(.title3)
                     .foregroundStyle(plant.isDoneToday ? Theme.secondaryText : Theme.primaryText)
                 HStack(spacing: 8) {
-                    Chip(icon: plant.light.icon, text: plant.light.rawValue)
-                    Chip(icon: "drop", text: plant.water.rawValue)
+                    Chip(
+                        icon: plant.light.icon,
+                        text: plant.light.rawValue,
+                        foregroundColor: plant.isDoneToday ? Theme.sunTag.opacity(0.65) : Theme.sunTag
+                    )
+                    Chip(
+                        icon: "drop",
+                        text: plant.water.rawValue,
+                        foregroundColor: plant.isDoneToday ? Theme.waterTag.opacity(0.65) : Theme.waterTag
+                    )
                 }
             }
             Spacer()

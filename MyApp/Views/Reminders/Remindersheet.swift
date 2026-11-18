@@ -14,7 +14,7 @@ struct ReminderSheet: View {
     @State private var water: WaterAmount
     @FocusState private var nameFocused: Bool
 
-    init(plant: Plant?, onSave: @escaping () -> Void = {}) {
+    init(plant: Plant?, onSave: @escaping () -> Void = {}) {//هويضمن تحميل البيانات الصحيحه في حقول الادخال سواء لتعديل نبته او لتجهيز الحقول لنبته جديده
         existing = plant
         self.onSave = onSave
         _name = State(initialValue: plant?.name ?? "")
@@ -22,7 +22,7 @@ struct ReminderSheet: View {
         _light = State(initialValue: plant?.light ?? .fullSun)
         _days = State(initialValue: plant?.wateringDays ?? .everyDay)
         _water = State(initialValue: plant?.water ?? .a)
-    }
+    }//بدونه لن تتمكن المتغيرات المراقبه من تلقي القيم الممرره بدقه خاصه وان النبات قد يكون نل في حاله الاضافه الجديده باختصار هو الجسر الي يربط بين البيانات الخارجيه وحاله الشاشه الخارجيه
 
     var body: some View {
         ZStack {
@@ -62,7 +62,7 @@ struct ReminderSheet: View {
                 if let existing {
                     Button {
                         store.delete(existing)
-                        dismiss()
+                        dismiss()//اذا النبته موجوده يطله زر الحذف
                     } label: {
                         Text("Delete Reminder")
                             .font(.subheadline)
@@ -82,7 +82,7 @@ struct ReminderSheet: View {
         .onAppear {
             if existing == nil {
                 nameFocused = true
-            }
+            }//يعمل عند ظهور الشاشه فهو يتحقق مما اذا كنت تضيفين نبته جديد اذا ترو يضبط المتغير  نيم فوكسد على ترو لجعل الموشر داحل حقل الاسم تلقايا مما يسهل الكتابه فور
         }
     }
 
@@ -112,9 +112,9 @@ struct ReminderSheet: View {
         }
     }
 
-    private func save() {
-        let trimmedName = name.trimmingCharacters(in: .whitespaces)
-        let finalName = trimmedName.isEmpty ? "Pothos" : trimmedName
+    private func save() {//فانكشن تقوم بمعالجه الاسم المدخل عن طريق ازاله المسافات الزايده او بمعنى ثاني ماتخلي اليوز يحط الاسم مسافات عشان تكون البيانات صحيحه
+        let trimmedName = name.trimmingCharacters(in: .whitespaces)//
+        let finalName = trimmedName.isEmpty ? "Planto" : trimmedName//اذا كان فارغ تضع اسم افتراضي
 
         if var plant = existing {
             plant.name = finalName
@@ -122,7 +122,7 @@ struct ReminderSheet: View {
             plant.light = light
             plant.wateringDays = days
             plant.water = water
-            store.update(plant)
+            store.update(plant)//يتحقق اذا النبته موجوده لتحديث بياناتها بعدين تستدعي ستور ابديت لحفظ التعديلات
         } else {
             store.add(
                 Plant(
@@ -130,7 +130,7 @@ struct ReminderSheet: View {
                     room: room,
                     light: light,
                     wateringDays: days,
-                    water: water
+                    water: water//او تنشى نبته جديده وتضيفها
                 )
             )
         }

@@ -39,6 +39,6 @@ struct NotificationBannerView: View {
                 )
         )
         .shadow(color: .black.opacity(0.2), radius: 10, y: 6)
-        .onTapGesture(perform: onDismiss)
+        .onTapGesture(perform: onDismiss)//يلتقط نقره اليوزر ويستدعي اجراء الاغلاق
     }
 }

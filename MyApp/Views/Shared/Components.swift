@@ -14,10 +14,15 @@ enum Theme {
     static let separator = Color(uiColor: .separator)
     static let accent = Color(red: 0.30, green: 0.85, blue: 0.62)
     static let button = Color(red: 0.24, green: 0.48, blue: 0.40)
+
+    // Tag colors from Sketch
+    static let sunTag = Color(red: 0.80, green: 0.78, blue: 0.52)
+    static let waterTag = Color(red: 0.30, green: 0.65, blue: 0.95)
+    static let tagBackground = Color(red: 0.094, green: 0.094, blue: 0.114)
 }
 
 struct Mascot: View {
-    var size: CGFloat = 170
+    var size: CGFloat = 210
 
     var body: some View {
         Image("plantMascot")
@@ -47,6 +52,7 @@ struct PlantProgressBar: View {
 struct Chip: View {
     let icon: String
     let text: String
+    var foregroundColor: Color = Theme.accent
 
     var body: some View {
         HStack(spacing: 4) {
@@ -54,10 +60,10 @@ struct Chip: View {
             Text(text)
         }
         .font(.caption2)
-        .foregroundStyle(Theme.accent)
+        .foregroundStyle(foregroundColor)
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
-        .background(Theme.accent.opacity(0.15), in: RoundedRectangle(cornerRadius: 6))
+        .background(Theme.tagBackground, in: RoundedRectangle(cornerRadius: 8))
     }
 }
 

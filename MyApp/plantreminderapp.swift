@@ -13,10 +13,10 @@ struct PlantReminderApp: App {
         NotificationManager.shared.setup()
     }
 
-    var body: some Scene {
+    var body: some Scene {//يحدد النافذه الرئيسيه للتطبيق و يعرض كوكنتن فيو
         WindowGroup {
             ContentView()
-                .environmentObject(store)
+                .environmentObject(store)// يسمح لاي واجهه بالوصول الى البيانات النباتات وتحديثها مباشره دون الحاجه لتمريرها يدويا بين الشاشات
         }
     }
 }

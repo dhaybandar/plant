@@ -1,65 +1,76 @@
 # Planto 🌱
 
-Planto is a simple SwiftUI app that helps people keep track of their plants and receive watering reminders.
+Planto is a modern, intuitive SwiftUI app that helps you care for your houseplants, track daily watering progress, and receive scheduled reminders.
 
-## Features
+---
 
-- Add a plant with its room, light requirement, watering frequency, and water amount.
-- Edit or delete an existing plant reminder.
-- Mark a plant as watered for the current day.
-- Track daily watering progress and see an all-done state.
-- Receive local notifications for watering reminders.
-- Supports Light Mode and Dark Mode automatically.
-- Uses Liquid Glass on the add button for a modern iOS experience.
+## 📱 App Screens | أهم واجهات التطبيق
 
-## Architecture
+<p align="center">
+  <img src="Screenshots/01_onboarding.png" width="22%" alt="Start your plant journey" />
+  <img src="Screenshots/02_plant_list.png" width="22%" alt="Today's Reminders & Progress" />
+  <img src="Screenshots/03_set_reminder.png" width="22%" alt="Set Plant Reminder" />
+  <img src="Screenshots/04_all_done.png" width="22%" alt="All Done Completed" />
+</p>
 
-The project follows a lightweight MVVM structure:
+| 1. Start Journey (Onboarding) | 2. Plant List & Progress | 3. Set Reminder (Sheet) | 4. All Done! 🎉 |
+| :---: | :---: | :---: | :---: |
+| واجهة البداية والترحيب | قائمة النباتات مع شريط الإنجاز | نموذج إضافة وتعديل التذكير | شاشة اكتمال الري اليومي |
+
+---
+
+## ✨ Features | المميزات
+
+- **Add & Edit Plants**: Set plant name, room (Living Room, Kitchen, Bedroom, etc.), light needs, and watering frequency/volume.
+- **Daily Progress Tracking**: Visual progress bar updating dynamically as you water each plant (`X of your plants feel loved today ✨`).
+- **All Done Celebration 🎉**: Playful celebration screen with mascot when all plants are watered.
+- **Local Notifications**: Custom local reminder notifications powered by `UserNotifications`.
+- **Swipe Actions**: Fast swipe gestures for deleting plant reminders.
+- **Modern iOS Design**: Styled for Dark Mode with custom typography, clean chips, and Liquid Glass aesthetics.
+
+---
+
+## 🏗️ Architecture
+
+The project follows a clean and lightweight **MVVM** architecture:
 
 ```text
 MyApp/
-├── Models/        # Plant model and option enums
-├── ViewModels/    # PlantStore: state, persistence, and plant actions
-├── Views/         # SwiftUI screens and reusable UI components
-└── Services/      # Local notification handling
+├── Models/        # Plant model and option enums (Room, Light, WateringDays, WaterAmount)
+├── ViewModels/    # PlantStore: state management, local persistence, actions
+├── Views/         # SwiftUI views organized by feature
+│   ├── Onboarding/  # OnboardingView
+│   ├── PlantList/   # PlantListView, PlantRow, AllDoneView
+│   ├── Reminders/   # Remindersheet
+│   └── Shared/      # HeaderView, Components (Theme, Mascot, Chip, PlantProgressBar)
+└── Services/      # NotificationManager for scheduling reminders
 ```
 
-`PlantStore` is responsible for adding, updating, deleting, and toggling plants. It also saves the plant list locally.
+---
 
-## Data Models
+## 💾 Local Storage
 
-- `Plant` is a `struct` representing a plant reminder.
-- `Room`, `Light`, `WateringDays`, and `WaterAmount` are `enum` types that provide the selectable options in the app.
+Plant reminders are encoded as JSON and stored locally using `UserDefaults` under key `plants_v1`, ensuring persistent data across app launches without requiring an external database.
 
-## Local Storage
+---
 
-Plant data is encoded as JSON and saved locally with `UserDefaults` under the key `plants_v1`.
+## 🔔 Notifications
 
-The data remains after closing the app, but is removed when the app is deleted. It does not sync between devices.
+Local notifications are managed via `NotificationManager` using Apple's `UserNotifications` framework. When adding a plant, a reminder is scheduled based on the selected watering schedule, with initial permission handling.
 
-## Notifications
+---
 
-The app uses `UserNotifications` for local watering reminders.
+## 🛠️ Requirements
 
-When testing, add a plant and allow notification permission. The app schedules a quick notification after a few seconds, in addition to the recurring reminder based on the selected watering schedule.
+- macOS Sonoma / Sequoia
+- Xcode 16+
+- iOS 18+
 
-## Requirements
+---
 
-- Xcode 26 or later
-- iOS 26 or later for the Liquid Glass experience
+## 🚀 How to Run
 
-## Run the Project
-
-1. Clone the repository.
-2. Open `Untitled Project.xcodeproj` in Xcode.
-3. Choose an iPhone simulator or a connected iPhone.
-4. Press **Run** (`⌘R`).
-5. Allow notifications when prompted.
-
-## Built With
-
-- Swift
-- SwiftUI
-- UserDefaults
-- UserNotifications
-
+1. Clone or open the repository in Xcode (`Untitled Project.xcodeproj`).
+2. Select an iOS Simulator (e.g. iPhone 16 / iPhone 17) or a physical device.
+3. Press **Run** (`⌘R`).
+4. Allow notifications when prompted to test reminder notifications.

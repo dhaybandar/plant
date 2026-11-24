@@ -1,6 +1,7 @@
 # Planto 🌱
 
-![Uploading Planto_Poster_2-2.png…]()
+![Uploading Planto_Poster_1.png…]()
+
 
 
 Planto is a SwiftUI app that helps people keep track of their plants and receive watering reminders.

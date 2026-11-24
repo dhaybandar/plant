@@ -12,12 +12,12 @@ struct PlantListView: View {
 
                 if store.plants.isEmpty {
                     Spacer()
-                    Text("No reminders set yet..")//اذا فارغه رح يعرض لي هذا الرساله
-                        .font(.caption)//
+                    Text("No reminders set yet..")
+                        .font(.caption)
                         .foregroundStyle(Theme.secondaryText)
                     Spacer()
                 } else if store.allDone {
-                    AllDoneView()//اذا تم ري النباتات كلها رح يعرض لي اللي موجود في
+                    AllDoneView()
                 } else {
                     VStack(spacing: 10) {
                         Text(store.doneCount == 0
@@ -29,7 +29,7 @@ struct PlantListView: View {
                             .animation(.none, value: store.doneCount)
                         PlantProgressBar(progress: store.progress)
                             .padding(.horizontal, 20)
-                    }//اذا لم تكتمل النهام يوضح عدد النباتات التي تم ريها مقارنه بالمجموع ويعرض شريط التقدم وليست النباتات لتتبعها
+                    }
                     .padding(.bottom, 8)
 
                     List {
@@ -43,14 +43,14 @@ struct PlantListView: View {
                                 }
                             )
                             .contentShape(Rectangle())
-                            .onTapGesture { plantToEdit = plant }//تستخدم لاكتشاف النقر على النبته وعند حدوث ذلك تقوم بتعيين النبته المحدده الى المتغير plattoedit لفتح شاشه التعديل الخاصه بها
+                            .onTapGesture { plantToEdit = plant }
                             .listRowBackground(Color.clear)
                             .listRowSeparatorTint(Theme.separator)
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
                                     withAnimation {
                                         store.delete(plant)
-                                    }//يحدد التفاعل مع عناصر الليست حيث يتيح النقر لتعديل النبته والسحب للحذف
+                                    }
                                 } label: {
                                     Image(systemName: "trash")
                                 }
@@ -75,12 +75,12 @@ struct PlantListView: View {
             .padding(.trailing, 20)
             .padding(.bottom, 20)
         }
-        .animation(.easeInOut, value: store.allDone)//لضمان سلاسهالانتقال عند تغير حاله اكتمال المهمام ليكون التحديث مرن وغير مفاجئ
+        .animation(.easeInOut, value: store.allDone)
         .sheet(isPresented: $showAdd) {
-            ReminderSheet(plant: nil)//يتحكم في عرض الشيت ريمندر
+            ReminderSheet(plant: nil)
         }
         .sheet(item: $plantToEdit) { plant in
             ReminderSheet(plant: plant)
-        }//عندما تسند قيمه للمتغير بلانت تو ادت يفتح النظام ريميندر شيت ويمرر له بيانات النبته المحدده لتعديلها
+        }
     }
 }

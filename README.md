@@ -1,76 +1,82 @@
 # Planto 🌱
 
-Planto is a modern, intuitive SwiftUI app that helps you care for your houseplants, track daily watering progress, and receive scheduled reminders.
-
----
-
-## 📱 App Screens | أهم واجهات التطبيق
-
 <p align="center">
-  <img src="Screenshots/01_onboarding.png" width="22%" alt="Start your plant journey" />
-  <img src="Screenshots/02_plant_list.png" width="22%" alt="Today's Reminders & Progress" />
-  <img src="Screenshots/03_set_reminder.png" width="22%" alt="Set Plant Reminder" />
-  <img src="Screenshots/04_all_done.png" width="22%" alt="All Done Completed" />
+  <img src="Screenshots/Planto_Poster_1.png" width="75%" alt="Planto Showcase Poster" />
 </p>
 
-| 1. Start Journey (Onboarding) | 2. Plant List & Progress | 3. Set Reminder (Sheet) | 4. All Done! 🎉 |
-| :---: | :---: | :---: | :---: |
-| واجهة البداية والترحيب | قائمة النباتات مع شريط الإنجاز | نموذج إضافة وتعديل التذكير | شاشة اكتمال الري اليومي |
+Planto is a SwiftUI app that helps people keep track of their plants and receive watering reminders.
 
----
+## About
 
-## ✨ Features | المميزات
+An individual project built in 10 days as part of a coding challenge. I was given a ready-made UI design and implemented it fully in SwiftUI on my own.
 
-- **Add & Edit Plants**: Set plant name, room (Living Room, Kitchen, Bedroom, etc.), light needs, and watering frequency/volume.
-- **Daily Progress Tracking**: Visual progress bar updating dynamically as you water each plant (`X of your plants feel loved today ✨`).
-- **All Done Celebration 🎉**: Playful celebration screen with mascot when all plants are watered.
-- **Local Notifications**: Custom local reminder notifications powered by `UserNotifications`.
-- **Swipe Actions**: Fast swipe gestures for deleting plant reminders.
-- **Modern iOS Design**: Styled for Dark Mode with custom typography, clean chips, and Liquid Glass aesthetics.
+## Features
 
----
+- Add a plant with its room, light requirement, watering frequency, and water amount.
+- Edit or delete an existing plant reminder.
+- Mark a plant as watered for the current day.
+- Track daily watering progress and see an all-done state.
+- Receive local notifications for watering reminders.
+- Supports Light Mode and Dark Mode automatically.
+- Uses Liquid Glass on the add button for a modern iOS experience.
 
-## 🏗️ Architecture
+## Challenges & What I Learned
 
-The project follows a clean and lightweight **MVVM** architecture:
+- **Matching the design exactly:** Translating a finished design into code meant paying close attention to spacing, colors, typography, and component details, so the final screens look like the original.
+- **Duplicate notifications:** Two notifications appeared at the same time for the same reminder. The cause was that the code scheduled a system notification after 3 seconds and, at the same moment, also created an in-app banner with the identical message. I removed the duplicate banner and kept only the system notification, so each reminder shows once.
+- **Light and Dark Mode:** The app follows the device's appearance setting, so I had to make sure the colors and UI look good in both modes instead of designing for only one.
+
+## Architecture
+
+The project follows a lightweight MVVM structure:
 
 ```text
 MyApp/
-├── Models/        # Plant model and option enums (Room, Light, WateringDays, WaterAmount)
-├── ViewModels/    # PlantStore: state management, local persistence, actions
-├── Views/         # SwiftUI views organized by feature
-│   ├── Onboarding/  # OnboardingView
-│   ├── PlantList/   # PlantListView, PlantRow, AllDoneView
-│   ├── Reminders/   # Remindersheet
-│   └── Shared/      # HeaderView, Components (Theme, Mascot, Chip, PlantProgressBar)
-└── Services/      # NotificationManager for scheduling reminders
+├── Models/        # Plant model and option enums
+├── ViewModels/    # PlantStore: state, persistence, and plant actions
+├── Views/         # SwiftUI screens and reusable UI components
+└── Services/      # Local notification handling
 ```
 
----
+`PlantStore` is responsible for adding, updating, deleting, and toggling plants. It also saves the plant list locally.
 
-## 💾 Local Storage
+## Data Models
 
-Plant reminders are encoded as JSON and stored locally using `UserDefaults` under key `plants_v1`, ensuring persistent data across app launches without requiring an external database.
+- `Plant` is a `struct` representing a plant reminder.
+- `Room`, `Light`, `WateringDays`, and `WaterAmount` are `enum` types that provide the selectable options in the app.
 
----
+## Local Storage
 
-## 🔔 Notifications
+Plant data is encoded as JSON and saved locally with `UserDefaults` under the key `plants_v1`.
 
-Local notifications are managed via `NotificationManager` using Apple's `UserNotifications` framework. When adding a plant, a reminder is scheduled based on the selected watering schedule, with initial permission handling.
+The data remains after closing the app, but is removed when the app is deleted. It does not sync between devices.
 
----
+## Notifications
 
-## 🛠️ Requirements
+The app uses `UserNotifications` for local watering reminders. The regular reminders follow the watering schedule you choose.
 
-- macOS Sonoma / Sequoia
-- Xcode 16+
-- iOS 18+
+For testing purposes, the app also schedules a notification a few seconds after adding a plant, so you can see a reminder without waiting. When testing, add a plant and allow notification permission.
 
----
+## Requirements
 
-## 🚀 How to Run
+- Xcode 16 or later
+- iOS 18 or later for the Liquid Glass experience
 
-1. Clone or open the repository in Xcode (`Untitled Project.xcodeproj`).
-2. Select an iOS Simulator (e.g. iPhone 16 / iPhone 17) or a physical device.
-3. Press **Run** (`⌘R`).
-4. Allow notifications when prompted to test reminder notifications.
+## Run the Project
+
+1. Clone the repository.
+2. Open `Untitled Project.xcodeproj` in Xcode.
+3. Choose an iPhone simulator or a connected iPhone.
+4. Press **Run** (`⌘R`).
+5. Allow notifications when prompted.
+
+## Built With
+
+- Swift
+- SwiftUI
+- UserDefaults
+- UserNotifications
+
+## Author
+
+[Dhay Bandar](https://github.com/dhaybandar)

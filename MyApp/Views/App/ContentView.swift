@@ -3,7 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject private var store: PlantStore
     @ObservedObject private var notifications = NotificationManager.shared
-    @State private var showOnboardingSheet = false//يدير حاله ظهور شاشه الاعدادات محليا
+    @State private var showOnboardingSheet = false
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -13,17 +13,17 @@ struct ContentView: View {
                 OnboardingView {
                     showOnboardingSheet = true
                 }
-                .transition(.opacity)//اذا كانت ليست النباتات فارغه يعرض شاشه الترحيب ويضبط حاله الاعدادات تصير نشطه
+                .transition(.opacity)
             } else {
                 PlantListView()
-                    .transition(.opacity)//اذا لا يعرض قائمه النباتات الحاليه
+                    .transition(.opacity)
             }
 
             if let banner = notifications.activeBanner {
                 NotificationBannerView(banner: banner) {
                     withAnimation {
                         notifications.activeBanner = nil
-                    }//تقوم بتهيئه الاشعارات عند ظهور الواجهه
+                    }
                 }
                 .padding(.top, 8)
                 .padding(.horizontal, 16)
@@ -36,9 +36,9 @@ struct ContentView: View {
         }
         .animation(.easeInOut, value: store.plants.isEmpty)
         .sheet(isPresented: $showOnboardingSheet) {
-            ReminderSheet(plant: nil)//
+            ReminderSheet(plant: nil)
         }
-    }//يضبط ظهور ورقه التذكير 
+    }
 }
 
 #Preview("Full Flow") {

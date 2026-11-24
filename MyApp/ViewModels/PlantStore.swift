@@ -3,16 +3,18 @@
 //  MyApp
 //
 
-import Combine//لاداره تدفق البيانات وتحديث الواجهه تلقائيا عند تغير البيانات
-import Foundation//يوفر الاساسيات مثل انواع البيانات والتعامل مع الملفات للحفظ والتحميل
+import Combine
+import Foundation
 
 @MainActor
 final class PlantStore: ObservableObject {
     @Published private(set) var plants: [Plant] = [] {
-        didSet { save() }//يدير ليست النباتات ويجعلها متاحه للواجهه لتعرضها بناء على ماسجله اليوز
+        didSet { save() }
     }
 
-    private let key = "plants_v1"//يحدد مفتح التخزين
+    private let key = "plants_v1"
+
+    // MARK: - Initialization
 
     init(plants: [Plant]? = nil) {
         if let plants {
@@ -20,19 +22,23 @@ final class PlantStore: ObservableObject {
         } else {
             load()
         }
-    }//يقوم بتهيئه قائمه البيانات ف اذا تسجل بيانات جديده يثت اعتمادها والا يتم استدعاء فانكشن التحميل لجلب البيانات المخزنه مسبقا
+    }
+
+    // MARK: - Computed Properties
 
     var doneCount: Int {
         plants.filter(\.isDoneToday).count
-    }//تحسب عدد البيانات اللي تم ريها اليوم
+    }
 
     var progress: Double {
         plants.isEmpty ? 0 : Double(doneCount) / Double(plants.count)
-    }//يحسب نسبه الانجاز المئويه لري النباتات يقسم عدد النباتات الي تم ريها على الاجمالي لتحديد مستوى التقدم
+    }
 
     var allDone: Bool {
         !plants.isEmpty && doneCount == plants.count
-    }//يرجع ترو اذا كانت الليست تحتوي على نباتات وتم ريها كلها اما اذا كانت فارغه فولس
+    }
+
+    // MARK: - Actions
 
     func clearAll() {
         plants.removeAll()
@@ -41,7 +47,7 @@ final class PlantStore: ObservableObject {
     func add(_ plant: Plant) {
         plants.append(plant)
         NotificationManager.shared.schedule(for: plant)
-    }//تضيف النبته الجديده الى اللست وتستدعي مدير الاشعارات لجدوله التبيهات الخاصه فيها
+    }
 
     func update(_ plant: Plant) {
         guard let index = plants.firstIndex(where: { $0.id == plant.id }) else { return }
@@ -56,20 +62,23 @@ final class PlantStore: ObservableObject {
 
     func toggle(_ plant: Plant) {
         guard let index = plants.firstIndex(where: { $0.id == plant.id }) else { return }
+        // تبديل حالة الري لليوم الحالي (إلغاء إذا كانت مروية، أو تسجيل وقت الري الآن)
         plants[index].lastWatered = plants[index].isDoneToday ? nil : Date()
-    }//حاله ري النبته اذا كان تم ريها تلغي تسجيل ذلك وتجعلها مرويه واذا ماتم ريها تسجل وقت ريها الحالي
+    }
+
+    // MARK: - Persistence
 
     private func save() {
         guard let data = try? JSONEncoder().encode(plants) else { return }
         UserDefaults.standard.set(data, forKey: key)
-    }//فانكشن تقوم بتحويل ليست النباتات الى بيانات جيسون واذا نجحت العمليه تقوم بحفط البيانات
+    }
 
     private func load() {
         guard let data = UserDefaults.standard.data(forKey: key),
               let decoded = try? JSONDecoder().decode([Plant].self, from: data) else {
             UserDefaults.standard.set(false, forKey: "hasOnboarded")
             return
-        }//فانكشن تقوم بقراه البيانات المحفوظه من اليوزر ديفولت ومحاوله فك تشفيرها لاستعاده ليست البيانات السابقه اذا فشلت العمليه تعيد ضبط حاله بدء التشغيل واذا نحجت يتم تحديث الليست بالبيانات المسترده
+        }
 
         plants = decoded
         if plants.isEmpty {

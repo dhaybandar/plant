@@ -1,4 +1,4 @@
-# Planto 🌱
+Planto 🌱
 
 <p align="center">
   <img src="Screenshots/Planto_Poster_1.png" width="75%" alt="Planto Showcase Poster" />
@@ -10,15 +10,9 @@ Planto is a SwiftUI app that helps people keep track of their plants and receive
 
 An individual project built in 10 days as part of a coding challenge. I was given a ready-made UI design and implemented it fully in SwiftUI on my own.
 
-## Features
+Planto is a SwiftUI app that helps people keep track of their plants and receive watering reminders.
 
-- Add a plant with its room, light requirement, watering frequency, and water amount.
-- Edit or delete an existing plant reminder.
-- Mark a plant as watered for the current day.
-- Track daily watering progress and see an all-done state.
-- Receive local notifications for watering reminders.
-- Supports Light Mode and Dark Mode automatically.
-- Uses Liquid Glass on the add button for a modern iOS experience.
+About
 
 ## Challenges & What I Learned
 
@@ -36,33 +30,35 @@ plant/
 ├── ViewModels/    # PlantStore: state, persistence, and plant actions
 ├── Views/         # SwiftUI screens and reusable UI components
 └── Services/      # Local notification handling
-```
+PlantStore is responsible for adding, updating, deleting, and toggling plants. It also saves the plant list locally.
 
-`PlantStore` is responsible for adding, updating, deleting, and toggling plants. It also saves the plant list locally.
+Data Models
 
-## Data Models
+Plant is a struct representing a plant reminder.
+Room, Light, WateringDays, and WaterAmount are enum types that provide the selectable options in the app.
+Local Storage
 
-- `Plant` is a `struct` representing a plant reminder.
-- `Room`, `Light`, `WateringDays`, and `WaterAmount` are `enum` types that provide the selectable options in the app.
-
-## Local Storage
-
-Plant data is encoded as JSON and saved locally with `UserDefaults` under the key `plants_v1`.
+Plant data is encoded as JSON and saved locally with UserDefaults under the key plants_v1.
 
 The data remains after closing the app, but is removed when the app is deleted. It does not sync between devices.
 
-## Notifications
+Notifications
 
 The app uses `UserNotifications` for local watering reminders. The regular reminders follow the watering schedule you choose.
 
 For testing purposes, the app also schedules a notification a few seconds after adding a plant, so you can see a reminder without waiting. When testing, add a plant and allow notification permission.
 
-## Requirements
+Requirements
 
 - Xcode 16 or later
 - iOS 18 or later for the Liquid Glass experience
 
-## Run the Project
+Clone the repository.
+Open Untitled Project.xcodeproj in Xcode.
+Choose an iPhone simulator or a connected iPhone.
+Press Run (⌘R).
+Allow notifications when prompted.
+Built With
 
 1. Clone the repository.
 2. Open `plant.xcodeproj` in Xcode.

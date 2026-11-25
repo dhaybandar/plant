@@ -31,7 +31,7 @@ An individual project built in 10 days as part of a coding challenge. I was give
 The project follows a lightweight MVVM structure:
 
 ```text
-MyApp/
+plant/
 ├── Models/        # Plant model and option enums
 ├── ViewModels/    # PlantStore: state, persistence, and plant actions
 ├── Views/         # SwiftUI screens and reusable UI components
@@ -65,7 +65,7 @@ For testing purposes, the app also schedules a notification a few seconds after 
 ## Run the Project
 
 1. Clone the repository.
-2. Open `Untitled Project.xcodeproj` in Xcode.
+2. Open `plant.xcodeproj` in Xcode.
 3. Choose an iPhone simulator or a connected iPhone.
 4. Press **Run** (`⌘R`).
 5. Allow notifications when prompted.

@@ -1,3 +1,8 @@
+//
+//  OnboardingView.swift
+//  Planto
+//
+
 import SwiftUI
 
 struct OnboardingView: View {

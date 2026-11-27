@@ -1,6 +1,6 @@
 //
-//  plantreminderapp.swift
-//  MyApp
+//  PlantReminderApp.swift
+//  Planto
 //
 
 import SwiftUI

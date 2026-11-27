@@ -1,6 +1,6 @@
 //
 //  Components.swift
-//  MyApp
+//  Planto
 //
 
 import SwiftUI
@@ -18,7 +18,13 @@ enum Theme {
     // Tag colors from Sketch
     static let sunTag = Color(red: 0.80, green: 0.78, blue: 0.52)
     static let waterTag = Color(red: 0.30, green: 0.65, blue: 0.95)
-    static let tagBackground = Color(red: 0.094, green: 0.094, blue: 0.114)
+    static let tagBackground = Color(
+        uiColor: UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+                ? UIColor(red: 0.094, green: 0.094, blue: 0.114, alpha: 1.0)
+                : UIColor.secondarySystemFill
+        }
+    )
 }
 
 struct Mascot: View {

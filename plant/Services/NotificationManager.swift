@@ -1,25 +1,16 @@
 //
-//  Notificationmanager.swift
-//  MyApp
+//  NotificationManager.swift
+//  Planto
 //
-//  Created by Dhay Bandar on 29/05/1448 AH.
+//  Created by Dhay Bandar.
 //
 
 import SwiftUI
-import Combine
 import UserNotifications
 
-struct InAppBanner: Identifiable, Equatable {
-    let id = UUID()
-    let title: String
-    let body: String
-}
-
-final class NotificationManager: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
+final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     static let shared = NotificationManager()
     private let center = UNUserNotificationCenter.current()
-
-    @Published var activeBanner: InAppBanner? = nil
 
     override private init() {
         super.init()
@@ -46,37 +37,43 @@ final class NotificationManager: NSObject, ObservableObject, UNUserNotificationC
 
     // MARK: - Scheduling
 
-    func schedule(for plant: Plant) {
-        center.delegate = self
-
-        requestPermission { [weak self] granted in
+    func schedule(for plant: Plant, isNewPlant: Bool = false) {
+        center.getNotificationSettings { [weak self] settings in
             guard let self else { return }
 
-            // إلغاء أي إشعار مجدول سابق لنفس النبتة لتفادي التكرار عند التعديل
+            guard settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional else {
+                return
+            }
+
+            // Cancel any previously scheduled notifications for this plant to avoid duplicates on update
             self.cancel(for: plant)
 
             let title = "My Plants 🌱"
             let body = "Time to water \(plant.name) 💧 (\(plant.water.rawValue))"
 
-            // إشعار تجريبي سريع (بعد 3 ثوانٍ) للتحقق من ظهور الإشعارات
             let content = UNMutableNotificationContent()
             content.title = title
             content.body = body
             content.sound = .default
 
-            let fastTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
-            let fastRequest = UNNotificationRequest(
-                identifier: "\(plant.id.uuidString)_immediate",
-                content: content,
-                trigger: fastTrigger
-            )
-            self.center.add(fastRequest) { error in
-                if let error {
-                    print("Error scheduling notification: \(error)")
+            #if DEBUG
+            // Immediate test notification (fires after 3 seconds) for newly created plants
+            if isNewPlant {
+                let fastTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
+                let fastRequest = UNNotificationRequest(
+                    identifier: "\(plant.id.uuidString)_immediate",
+                    content: content,
+                    trigger: fastTrigger
+                )
+                self.center.add(fastRequest) { error in
+                    if let error {
+                        print("Error scheduling fast test notification: \(error.localizedDescription)")
+                    }
                 }
             }
+            #endif
 
-            // إشعار دوري حسب جدول الري المحدد للنبتة
+            // Periodic notification according to the plant's watering schedule
             let daysInterval = max(60, TimeInterval(plant.wateringDays.days * 24 * 60 * 60))
             let periodicTrigger = UNTimeIntervalNotificationTrigger(timeInterval: daysInterval, repeats: true)
             let periodicRequest = UNNotificationRequest(
@@ -84,7 +81,11 @@ final class NotificationManager: NSObject, ObservableObject, UNUserNotificationC
                 content: content,
                 trigger: periodicTrigger
             )
-            self.center.add(periodicRequest)
+            self.center.add(periodicRequest) { error in
+                if let error {
+                    print("Error scheduling periodic notification: \(error.localizedDescription)")
+                }
+            }
         }
     }
 
@@ -97,9 +98,13 @@ final class NotificationManager: NSObject, ObservableObject, UNUserNotificationC
         ])
     }
 
+    func cancelAll() {
+        center.removeAllPendingNotificationRequests()
+    }
+
     // MARK: - UNUserNotificationCenterDelegate
 
-    // عرض الإشعار حتى أثناء فتح التطبيق في الواجهة
+    // Present notifications even while the app is in the foreground
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,

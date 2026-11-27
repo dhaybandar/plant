@@ -1,3 +1,8 @@
+//
+//  PlantListView.swift
+//  Planto
+//
+
 import SwiftUI
 
 struct PlantListView: View {
@@ -71,6 +76,7 @@ struct PlantListView: View {
                     .foregroundStyle(.white)
                     .frame(width: 36, height: 36)
             }
+            .accessibilityLabel("Add plant")
             .glassEffect(.regular.tint(Theme.button).interactive(), in: Circle())
             .padding(.trailing, 20)
             .padding(.bottom, 20)

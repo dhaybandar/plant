@@ -1,6 +1,6 @@
 //
 //  PlantStore.swift
-//  MyApp
+//  Planto
 //
 
 import Combine
@@ -41,18 +41,19 @@ final class PlantStore: ObservableObject {
     // MARK: - Actions
 
     func clearAll() {
+        NotificationManager.shared.cancelAll()
         plants.removeAll()
     }
 
     func add(_ plant: Plant) {
         plants.append(plant)
-        NotificationManager.shared.schedule(for: plant)
+        NotificationManager.shared.schedule(for: plant, isNewPlant: true)
     }
 
     func update(_ plant: Plant) {
         guard let index = plants.firstIndex(where: { $0.id == plant.id }) else { return }
         plants[index] = plant
-        NotificationManager.shared.schedule(for: plant)
+        NotificationManager.shared.schedule(for: plant, isNewPlant: false)
     }
 
     func delete(_ plant: Plant) {
@@ -62,27 +63,28 @@ final class PlantStore: ObservableObject {
 
     func toggle(_ plant: Plant) {
         guard let index = plants.firstIndex(where: { $0.id == plant.id }) else { return }
-        // تبديل حالة الري لليوم الحالي (إلغاء إذا كانت مروية، أو تسجيل وقت الري الآن)
+        // Toggle watering state for today (reset if already watered, or mark as watered now)
         plants[index].lastWatered = plants[index].isDoneToday ? nil : Date()
     }
 
     // MARK: - Persistence
 
     private func save() {
-        guard let data = try? JSONEncoder().encode(plants) else { return }
-        UserDefaults.standard.set(data, forKey: key)
+        do {
+            let data = try JSONEncoder().encode(plants)
+            UserDefaults.standard.set(data, forKey: key)
+        } catch {
+            print("Failed to encode and save plants: \(error.localizedDescription)")
+        }
     }
 
     private func load() {
-        guard let data = UserDefaults.standard.data(forKey: key),
-              let decoded = try? JSONDecoder().decode([Plant].self, from: data) else {
-            UserDefaults.standard.set(false, forKey: "hasOnboarded")
-            return
-        }
-
-        plants = decoded
-        if plants.isEmpty {
-            UserDefaults.standard.set(false, forKey: "hasOnboarded")
+        guard let data = UserDefaults.standard.data(forKey: key) else { return }
+        do {
+            let decoded = try JSONDecoder().decode([Plant].self, from: data)
+            plants = decoded
+        } catch {
+            print("Failed to decode saved plants: \(error.localizedDescription)")
         }
     }
 }

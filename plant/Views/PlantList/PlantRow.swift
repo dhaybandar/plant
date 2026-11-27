@@ -1,3 +1,8 @@
+//
+//  PlantRow.swift
+//  Planto
+//
+
 import SwiftUI
 
 struct PlantRow: View {
@@ -12,6 +17,7 @@ struct PlantRow: View {
                     .foregroundStyle(plant.isDoneToday ? Theme.accent : Theme.secondaryText)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(plant.isDoneToday ? "Mark as not watered" : "Mark as watered")
 
             VStack(alignment: .leading, spacing: 6) {
                 Label("in \(plant.room.rawValue)", systemImage: "location")

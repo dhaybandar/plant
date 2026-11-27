@@ -30,7 +30,7 @@ An individual project built in 10 days as part of an iOS coding challenge. Start
 - **Plant Care Reminders:** Add plants with customized location/room, light level, watering interval, and water amount.
 - **Track Progress:** Mark plants as watered for today and watch the daily progress bar update in real-time.
 - **Celebration State:** Shows an "All Done! 🎉" celebration screen once all daily watering tasks are completed.
-- **Local Notifications:** Automated reminders via `UserNotifications` tailored to each plant's watering schedule (includes an instant 3-second demo notification for easy testing).
+- **Local Notifications:** Automated reminders via `UserNotifications` tailored to each plant's watering schedule (includes an instant 3-second demo notification for easy testing in debug builds).
 - **Edit & Swipe-to-Delete:** Easily update reminder details or swipe to delete a plant.
 - **Modern iOS Experience:** Uses Liquid Glass (`.glassEffect`) for the action button.
 - **Adaptive UI:** Full automatic support for both **Light Mode** and **Dark Mode**.
@@ -53,7 +53,7 @@ The project follows a clean **MVVM (Model-View-ViewModel)** structure:
 plant/
 ├── Models/        # Plant data struct and selectable enums (Room, Light, WateringDays, WaterAmount)
 ├── ViewModels/    # PlantStore: Central state management, UserDefaults persistence, and business logic
-├── Views/         # SwiftUI screens, sheets, reusable components, and banner views
+├── Views/         # SwiftUI screens, sheets, and reusable components
 │   ├── App/
 │   ├── Onboarding/
 │   ├── PlantList/
@@ -73,14 +73,23 @@ Plant entries are serialized to JSON and stored locally using `UserDefaults` und
 ## 🔔 Notifications
 
 - **Routine Reminders:** Calculated using `UNTimeIntervalNotificationTrigger` based on the selected watering interval.
-- **Instant Test Trigger:** Automatically schedules a test notification 3 seconds after adding a plant so you can immediately verify permissions and alert styling.
+- **Instant Test Trigger:** Automatically schedules a test notification 3 seconds after adding a new plant in debug mode (`#if DEBUG`) for quick verification.
+
+---
+
+## ⚠️ Known Limitations
+
+- **Notification Recalculation on Water Action:** Toggling a plant as watered records the action for the current day, but does not cancel or postpone the next scheduled notification trigger.
+- **Periodic Schedule Anchor:** Recurring reminders are triggered at intervals anchored to when the reminder was scheduled rather than a fixed daily hour.
+- **Local-Only Storage:** Plant data is persisted locally via `UserDefaults` and does not currently synchronize across multiple devices or iCloud.
+- **Daily Checklist Scope:** Progress tracking evaluates whether each plant in the collection has been marked as watered today, following the original challenge design.
 
 ---
 
 ## 📋 Requirements
 
-- iOS 18.0+
-- Xcode 16.0+
+- iOS 26.0+
+- Xcode 26.0+
 - Swift 6 / SwiftUI
 
 ---
@@ -92,7 +101,7 @@ Plant entries are serialized to JSON and stored locally using `UserDefaults` und
    git clone https://github.com/dhaybandar/plant.git
    ```
 2. Open `plant.xcodeproj` in Xcode.
-3. Select an iOS Simulator (e.g., iPhone 16) or a connected device.
+3. Select an iOS Simulator or a connected device.
 4. Press **Run** (`⌘R`).
 5. Allow notification permissions when prompted to experience the reminders.
 

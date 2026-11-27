@@ -1,3 +1,8 @@
+//
+//  ReminderSheet.swift
+//  Planto
+//
+
 import SwiftUI
 
 struct ReminderSheet: View {
@@ -82,7 +87,7 @@ struct ReminderSheet: View {
         }
         .presentationDragIndicator(.visible)
         .onAppear {
-            // تركيز المؤشر تلقائياً في حقل الاسم عند إضافة نبتة جديدة
+            // Automatically focus the text field when adding a new plant
             if existing == nil {
                 nameFocused = true
             }
@@ -121,7 +126,7 @@ struct ReminderSheet: View {
 
     private func save() {
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
-        // استخدام اسم افتراضي إذا ترك المستخدم الحقل فارغاً
+        // Fall back to default name "Planto" if field is left empty
         let finalName = trimmedName.isEmpty ? "Planto" : trimmedName
 
         if var plant = existing {

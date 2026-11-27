@@ -1,8 +1,12 @@
+//
+//  ContentView.swift
+//  Planto
+//
+
 import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var store: PlantStore
-    @ObservedObject private var notifications = NotificationManager.shared
     @State private var showOnboardingSheet = false
 
     var body: some View {
@@ -18,21 +22,6 @@ struct ContentView: View {
                 PlantListView()
                     .transition(.opacity)
             }
-
-            if let banner = notifications.activeBanner {
-                NotificationBannerView(banner: banner) {
-                    withAnimation {
-                        notifications.activeBanner = nil
-                    }
-                }
-                .padding(.top, 8)
-                .padding(.horizontal, 16)
-                .transition(.move(edge: .top).combined(with: .opacity))
-                .zIndex(100)
-            }
-        }
-        .onAppear {
-            NotificationManager.shared.setup()
         }
         .animation(.easeInOut, value: store.plants.isEmpty)
         .sheet(isPresented: $showOnboardingSheet) {

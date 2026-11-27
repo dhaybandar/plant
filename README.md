@@ -90,7 +90,7 @@ Plant entries are serialized to JSON and stored locally using `UserDefaults` und
 
 - iOS 26.0+
 - Xcode 26.0+
-- Swift 6 / SwiftUI
+- Swift / SwiftUI
 
 ---
 

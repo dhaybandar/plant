@@ -1,82 +1,112 @@
 # Planto 🌱
 
 <p align="center">
-  <img src="Screenshots/Planto_Poster_1.png" width="75%" alt="Planto Showcase Poster" />
+  <img src="Screenshots/Planto_Poster_1.png" width="85%" alt="Planto Showcase Poster" />
 </p>
 
-Planto is a SwiftUI app that helps people keep track of their plants and receive watering reminders.
+Planto is an iOS SwiftUI app designed to help plant lovers track their houseplant care routine, monitor daily watering progress, and receive timely local notifications.
 
-## About
+---
 
-An individual project built in 10 days as part of a coding challenge. I was given a ready-made UI design and implemented it fully in SwiftUI on my own.
+## 📱 Screenshots
 
-## Features
+<p align="center">
+  <img src="Screenshots/01_onboarding.png" width="22%" alt="Onboarding Screen" />
+  <img src="Screenshots/02_plant_list.png" width="22%" alt="Plant List Screen" />
+  <img src="Screenshots/03_set_reminder.png" width="22%" alt="Set Reminder Screen" />
+  <img src="Screenshots/04_all_done.png" width="22%" alt="All Done Screen" />
+</p>
 
-- Add a plant with its room, light requirement, watering frequency, and water amount.
-- Edit or delete an existing plant reminder.
-- Mark a plant as watered for the current day.
-- Track daily watering progress and see an all-done state.
-- Receive local notifications for watering reminders.
-- Supports Light Mode and Dark Mode automatically.
-- Uses Liquid Glass on the add button for a modern iOS experience.
+---
 
-## Challenges & What I Learned
+## 🌿 About
 
-- **Matching the design exactly:** Translating a finished design into code meant paying close attention to spacing, colors, typography, and component details, so the final screens look like the original.
-- **Duplicate notifications:** Two notifications appeared at the same time for the same reminder. The cause was that the code scheduled a system notification after 3 seconds and, at the same moment, also created an in-app banner with the identical message. I removed the duplicate banner and kept only the system notification, so each reminder shows once.
-- **Light and Dark Mode:** The app follows the device's appearance setting, so I had to make sure the colors and UI look good in both modes instead of designing for only one.
+An individual project built in 10 days as part of an iOS coding challenge. Starting from a ready-made UI design, I brought the concept to life with native SwiftUI, modern iOS components, and smooth animations.
 
-## Architecture
+---
 
-The project follows a lightweight MVVM structure:
+## ✨ Features
+
+- **Plant Care Reminders:** Add plants with customized location/room, light level, watering interval, and water amount.
+- **Track Progress:** Mark plants as watered for today and watch the daily progress bar update in real-time.
+- **Celebration State:** Shows an "All Done! 🎉" celebration screen once all daily watering tasks are completed.
+- **Local Notifications:** Automated reminders via `UserNotifications` tailored to each plant's watering schedule (includes an instant 3-second demo notification for easy testing).
+- **Edit & Swipe-to-Delete:** Easily update reminder details or swipe to delete a plant.
+- **Modern iOS Experience:** Uses Liquid Glass (`.glassEffect`) for the action button.
+- **Adaptive UI:** Full automatic support for both **Light Mode** and **Dark Mode**.
+
+---
+
+## 🧠 Challenges & What I Learned
+
+- **Pixel-Perfect UI:** Translating design specifications into code with strict attention to spacing, colors, custom tags, typography, and interactive sheets.
+- **Notification Deduplication:** Resolved an issue where dual alerts appeared by isolating in-app alerts from scheduled system notifications, ensuring clean, single-delivery notifications.
+- **Adaptive Appearance:** Tuned contrast, background layers, and component colors across both Light and Dark appearances.
+
+---
+
+## 🏗️ Architecture
+
+The project follows a clean **MVVM (Model-View-ViewModel)** structure:
 
 ```text
 plant/
-├── Models/        # Plant model and option enums
-├── ViewModels/    # PlantStore: state, persistence, and plant actions
-├── Views/         # SwiftUI screens and reusable UI components
-└── Services/      # Local notification handling
+├── Models/        # Plant data struct and selectable enums (Room, Light, WateringDays, WaterAmount)
+├── ViewModels/    # PlantStore: Central state management, UserDefaults persistence, and business logic
+├── Views/         # SwiftUI screens, sheets, reusable components, and banner views
+│   ├── App/
+│   ├── Onboarding/
+│   ├── PlantList/
+│   ├── Reminders/
+│   └── Shared/
+└── Services/      # NotificationManager: UNUserNotificationCenter scheduling and permissions
 ```
 
-`PlantStore` is responsible for adding, updating, deleting, and toggling plants. It also saves the plant list locally.
+---
 
-## Data Models
+## 💾 Local Storage
 
-- `Plant` is a `struct` representing a plant reminder.
-- `Room`, `Light`, `WateringDays`, and `WaterAmount` are `enum` types that provide the selectable options in the app.
+Plant entries are serialized to JSON and stored locally using `UserDefaults` under the key `plants_v1`, keeping user data persistent across app launches without requiring an external backend.
 
-## Local Storage
+---
 
-Plant data is encoded as JSON and saved locally with `UserDefaults` under the key `plants_v1`.
+## 🔔 Notifications
 
-The data remains after closing the app, but is removed when the app is deleted. It does not sync between devices.
+- **Routine Reminders:** Calculated using `UNTimeIntervalNotificationTrigger` based on the selected watering interval.
+- **Instant Test Trigger:** Automatically schedules a test notification 3 seconds after adding a plant so you can immediately verify permissions and alert styling.
 
-## Notifications
+---
 
-The app uses `UserNotifications` for local watering reminders. The regular reminders follow the watering schedule you choose.
+## 📋 Requirements
 
-For testing purposes, the app also schedules a notification a few seconds after adding a plant, so you can see a reminder without waiting. When testing, add a plant and allow notification permission.
+- iOS 18.0+
+- Xcode 16.0+
+- Swift 6 / SwiftUI
 
-## Requirements
+---
 
-- Xcode 16 or later
-- iOS 18 or later for the Liquid Glass experience
+## 🚀 How to Run
 
-## Run the Project
-
-1. Clone the repository.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/dhaybandar/plant.git
+   ```
 2. Open `plant.xcodeproj` in Xcode.
-3. Choose an iPhone simulator or a connected iPhone.
+3. Select an iOS Simulator (e.g., iPhone 16) or a connected device.
 4. Press **Run** (`⌘R`).
-5. Allow notifications when prompted.
+5. Allow notification permissions when prompted to experience the reminders.
 
-## Built With
+---
 
-- Swift
-- SwiftUI
-- UserDefaults
-- UserNotifications
+## 🛠️ Built With
 
-## Author
+- **SwiftUI** & **Combine**
+- **UserNotifications Framework**
+- **UserDefaults** (Local Persistence)
 
-[Dhay Bandar](https://github.com/dhaybandar)
+---
+
+## 👤 Author
+
+**Dhay Bandar**  
+GitHub: [@dhaybandar](https://github.com/dhaybandar)

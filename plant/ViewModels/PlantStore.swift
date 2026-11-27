@@ -12,13 +12,24 @@ final class PlantStore: ObservableObject {
         didSet { save() }
     }
 
+    @Published var hasOnboarded: Bool {
+        didSet {
+            UserDefaults.standard.set(hasOnboarded, forKey: onboardedKey)
+        }
+    }
+
     private let key = "plants_v1"
+    private let onboardedKey = "hasOnboarded_v1"
 
     // MARK: - Initialization
 
     init(plants: [Plant]? = nil) {
+        self.hasOnboarded = UserDefaults.standard.bool(forKey: "hasOnboarded_v1")
         if let plants {
             self.plants = plants
+            if !plants.isEmpty {
+                self.hasOnboarded = true
+            }
         } else {
             load()
         }
@@ -40,12 +51,17 @@ final class PlantStore: ObservableObject {
 
     // MARK: - Actions
 
+    func completeOnboarding() {
+        hasOnboarded = true
+    }
+
     func clearAll() {
         NotificationManager.shared.cancelAll()
         plants.removeAll()
     }
 
     func add(_ plant: Plant) {
+        hasOnboarded = true
         plants.append(plant)
         NotificationManager.shared.schedule(for: plant, isNewPlant: true)
     }
@@ -83,6 +99,9 @@ final class PlantStore: ObservableObject {
         do {
             let decoded = try JSONDecoder().decode([Plant].self, from: data)
             plants = decoded
+            if !plants.isEmpty {
+                hasOnboarded = true
+            }
         } catch {
             print("Failed to decode saved plants: \(error.localizedDescription)")
         }

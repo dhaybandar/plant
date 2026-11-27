@@ -13,7 +13,7 @@ struct ContentView: View {
         ZStack(alignment: .top) {
             Theme.background.ignoresSafeArea()
 
-            if store.plants.isEmpty {
+            if !store.hasOnboarded && store.plants.isEmpty {
                 OnboardingView {
                     showOnboardingSheet = true
                 }
@@ -23,6 +23,7 @@ struct ContentView: View {
                     .transition(.opacity)
             }
         }
+        .animation(.easeInOut, value: store.hasOnboarded)
         .animation(.easeInOut, value: store.plants.isEmpty)
         .sheet(isPresented: $showOnboardingSheet) {
             ReminderSheet(plant: nil)
